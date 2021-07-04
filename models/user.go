@@ -3,10 +3,10 @@ package models
 import "golang.org/x/crypto/bcrypt"
 
 type User struct {
-	Id       uint
-	Name     string
-	Email    string `gorm:"unique"`
-	Password string
+	Id       uint `json:"id"`
+	Name     string `json:"name"`
+	Email    string `json:"email" gorm:"unique"`
+	Password string `json:"-"`
 }
 
 func HashPassword(password string) (string, error) {
