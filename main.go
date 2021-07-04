@@ -4,6 +4,7 @@ import (
 	"github.com/PrinceNarteh/go-auth/database"
 	"github.com/PrinceNarteh/go-auth/routes"
 	"github.com/gofiber/fiber/v2"
+	"github.com/gofiber/fiber/v2/middleware/cors"
 )
 
 func main() {
@@ -12,6 +13,10 @@ func main() {
 
 	// instantiate fiber app
 	app := fiber.New()
+
+	app.Use(cors.New(cors.Config{
+		AllowCredentials: true,
+	}))
 
 	// setting up routes
 	routes.Setup(app)
