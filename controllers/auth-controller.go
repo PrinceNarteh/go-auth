@@ -1,6 +1,7 @@
 package controllers
 
 import (
+	"log"
 	"strconv"
 	"time"
 
@@ -19,15 +20,16 @@ func Register(c *fiber.Ctx) error {
 		return err
 	}
 
-	hashedPassword, _ := models.HashPassword(data["password"])
-
 	user := models.User{
 		Name:     data["name"],
 		Email:    data["email"],
-		Password: hashedPassword,
+		Password: data["password"],
 	}
+	log.Println(user)
+	user.HashPassword()
+	log.Println(user)
 
-	database.DB.Create(&user)
+	// database.DB.Create(&user)
 
 	return c.JSON(data)
 }
@@ -49,7 +51,7 @@ func Login(c *fiber.Ctx) error {
 		})
 	}
 
-	if err := models.ComparePassword(data["password"], user.Password); !err {
+	if err := user.ComparePassword(data["password"]); !err {
 		c.Status(fiber.StatusBadRequest)
 		return c.JSON(fiber.Map{
 			"message": "Invalid Credentials",
